@@ -1018,6 +1018,8 @@ function friendCrack() {
                     continue;
                 }
 
+                $total = empty($targetCount) ? count($friends) : $targetCount;
+
                 while (true) {
                     if (empty($crackMethod)) {
                         input('Pilih Metode', ['Dump Friends', $target], 'Pilih metode crack yang tersedia.', ['Free (default)', 'Mobile']);
@@ -1045,7 +1047,6 @@ function friendCrack() {
                         if ($crackDebug == null) {
                             input('Debugging', ['Dump Friends', $target], 'Apakah Anda ingin menjalankan script dengan debugging?', ['Ya (default)', 'Tidak']);
                             $confirm = strtolower(trim(fgets(STDIN)));
-                            $total = empty($targetCount) ? count($friends) : $targetCount;
 
                             if ($confirm == 'clear') {
                                 clear();
@@ -1572,10 +1573,14 @@ function crack($target, $friends, $total, $debug = false, $method) {
         $passCount = count($passwd);
 
         $processedItems++;
-        if ($i <= 1) {
-            $progress = 0;
+        if ($processedItems <= 0) {
+            if ($lastRange == 0) {
+                $progress = 0;
+            } else {
+                $progress = 100;
+            }
         } else {
-            $progress = ($i / $total) * 100;
+            $progress = ($processedItems / $total) * 100;
         }
 
         $crackPrefix = !empty($debug) ? 'DEBUG '.strtoupper($method) : strtoupper($method);
