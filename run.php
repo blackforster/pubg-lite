@@ -1574,7 +1574,7 @@ function crack($target, $friends, $total, $debug = false, $method) {
 
         $processedItems++;
         if ($processedItems <= 0) {
-            if ($lastRange == 0) {
+            if ($total == 0) {
                 $progress = 0;
             } else {
                 $progress = 100;
