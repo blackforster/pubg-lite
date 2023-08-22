@@ -1558,6 +1558,10 @@ function crack($target, $friends, $total, $debug = false, $method) {
     echo "Tekan ${white}CTRL + C$cyan untuk menghentikan proses.\n\n";
     echo $reset;
 
+    if (!empty($debug)) {
+        $ip = getIP();
+    }
+
     $processedItems = -1;
     $indexFlightMode = 0;
     foreach (range($firstRange, $lastRange) as $i) {
@@ -1568,10 +1572,10 @@ function crack($target, $friends, $total, $debug = false, $method) {
         $passCount = count($passwd);
 
         $processedItems++;
-        if (count($friends) == 1) {
-            $progress = 100;
+        if ($i <= 1) {
+            $progress = 0;
         } else {
-            $progress = ($processedItems / $total) * 100;
+            $progress = ($i / $total) * 100;
         }
 
         $crackPrefix = !empty($debug) ? 'DEBUG '.strtoupper($method) : strtoupper($method);
@@ -1590,10 +1594,6 @@ function crack($target, $friends, $total, $debug = false, $method) {
 
         $progressColor = ($progress >= 100) ? $green : $yellow;
 
-        if (!empty($debug)) {
-            $ip = getIP();
-        }
-
         $indexFlightMode++;
         if (!empty($flightModeEvery)) {
             if ($indexFlightMode > $flightModeEvery) {
@@ -1603,6 +1603,7 @@ function crack($target, $friends, $total, $debug = false, $method) {
                         file_get_contents($flightModeWebhookUrl);
                         $indexFlightMode = 0;
                         sleep(5);
+                        $ip = getIP();
                     } catch (Exception $e) {
                         echo "${cyan}║ ${red}[${white}•$red] Mode pesawat gagal diaktifkan.$reset\n";
                     }
@@ -1618,6 +1619,7 @@ function crack($target, $friends, $total, $debug = false, $method) {
 
                         if ($currentIP !== getIP()) {
                             echo "${cyan}║ ${green}[${white}•$green] Alamat IP telah berubah. Melanjutkan proses...$reset\n";
+                            $ip = getIP();
                             break;
                         }
                     }
@@ -1632,6 +1634,7 @@ function crack($target, $friends, $total, $debug = false, $method) {
                     file_get_contents($flightModeWebhookUrl);
                     $indexFlightMode = 0;
                     sleep(5);
+                    $ip = getIP();
                 } catch (Exception $e) {
                     echo "${cyan}║ ${red}[${white}•$red] Mode pesawat gagal diaktifkan.$reset\n";
                 }
@@ -1647,6 +1650,7 @@ function crack($target, $friends, $total, $debug = false, $method) {
 
                     if ($currentIP !== getIP()) {
                         echo "${cyan}║ ${green}[${white}•$green] Alamat IP telah berubah. Melanjutkan proses...$reset\n";
+                        $ip = getIP();
                         break;
                     }
                 }
@@ -1657,6 +1661,6 @@ function crack($target, $friends, $total, $debug = false, $method) {
 
         echo "\033[2K";
         echo "\033[0G";
-        echo "${cyan}║\n".$accountResult.$progressPrefix."[${white}PROGRESS${cyan}] [${white}$firstRange${cyan}/${white}${lastRange}${cyan}]${white} ⇔ ${progressColor}" . round($progress, 2) . "%${reset}\n\n";
+        echo "${cyan}║\n".$accountResult.$progressPrefix."[${white}PROGRESS${cyan}] [${white}${i}${cyan}/${white}${lastRange}${cyan}]${white} ⇔ ${progressColor}" . round($progress, 2) . "%${reset}\n\n";
     }
 }
